@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.utils.ScreenUtils
 
 class MyFlappyBirdClone : ApplicationAdapter() {
-    var batch: SpriteBatch? = null
-    var img: Texture? = null
+    private lateinit var batch: SpriteBatch
+    private lateinit var img: Texture
     override fun create() {
         batch = SpriteBatch()
         img = Texture("badlogic.jpg")
@@ -15,13 +15,13 @@ class MyFlappyBirdClone : ApplicationAdapter() {
 
     override fun render() {
         ScreenUtils.clear(1f, 0f, 0f, 1f)
-        batch!!.begin()
-        batch!!.draw(img, 0f, 0f)
-        batch!!.end()
+        batch.begin()
+        batch.draw(img, 0f, 0f)
+        batch.end()
     }
 
     override fun dispose() {
-        batch!!.dispose()
-        img!!.dispose()
+        batch.dispose()
+        img.dispose()
     }
 }
