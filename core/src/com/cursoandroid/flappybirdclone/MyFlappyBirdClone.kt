@@ -9,35 +9,36 @@ import javax.swing.Spring
 class MyFlappyBirdClone : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
     private lateinit var model: FlappyBirdModel
-    private var index: Float = 0F
 
     override fun create() {
         batch = SpriteBatch()
         model = FlappyBirdModel(
-           width =  Gdx.graphics.width.toFloat(),
-           height =  Gdx.graphics.height.toFloat()
+            width = Gdx.graphics.width.toFloat(),
+            height = Gdx.graphics.height.toFloat(),
+            axisX = 30F,
+            axisY = Gdx.graphics.height.toFloat() / 2,
+            gravity = 0F
         )
     }
 
     override fun render() {
-        //ScreenUtils.clear(1f, 0f, 0f, 1f)
-        if (index > 3) {
-            index = 0F
-        }
         batch.begin()
+
+        model.applyGravity(Gdx.input.justTouched())
         batch.draw(
             model.backgroundImg,
             0f,
             0f,
-            Gdx.graphics.width.toFloat(),
-            Gdx.graphics.height.toFloat()
+            model.width,
+            model.height
         )
         batch.draw(
-            model.birdImgs[index.toInt()],
-            Gdx.graphics.width.toFloat() / 2,
-            Gdx.graphics.height.toFloat() / 2
+            model.birdImgs[model.index.toInt()],
+            model.axisX,
+            model.axisY
         )
-        index += Gdx.graphics.deltaTime * 5
+        model.next()
+
         batch.end()
     }
 
@@ -47,9 +48,18 @@ class MyFlappyBirdClone : ApplicationAdapter() {
     }
 }
 
-private class FlappyBirdModel(width: Float, height: Float) {
+private class FlappyBirdModel(
+    val width: Float,
+    val height: Float,
+    val axisX: Float,
+    var axisY: Float,
+    var gravity: Float
+) {
     val birdImgs = ArrayList<Texture>(3)
     val backgroundImg: Texture = Texture("fundo.png")
+    var index: Float = 0F
+        get() = if (field > 3) 0F else field
+
     init {
         fillBirdImagens()
     }
@@ -63,6 +73,22 @@ private class FlappyBirdModel(width: Float, height: Float) {
     fun dispose() {
         backgroundImg.dispose()
         birdImgs.forEach { it.dispose() }
+    }
+
+    fun next() {
+        index += Gdx.graphics.deltaTime * 5
+        gravity++
+    }
+
+    fun applyGravity(isTouched: Boolean) {
+
+        if (isTouched) {
+            gravity = -20f
+        }
+
+        if (axisY > 0 || isTouched) {
+            axisY -= gravity
+        }
     }
 
 }
