@@ -4,6 +4,8 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MyFlappyBirdClone : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
@@ -69,15 +71,28 @@ private class FlappyBirdModel(
     val pipeTop: PipeModel,
     val pipeBottom: PipeModel
 ) {
-
+    val random = Random()
+     var spaceRandom = 0f
     fun draw(batch: SpriteBatch) {
-        bird.applyGravity(Gdx.input.justTouched())
         background.draw(batch)
+
+        bird.applyGravity(Gdx.input.justTouched())
         bird.draw(batch)
-        //pipeBottom.axisX--
-        pipeBottom.draw(batch)
-        pipeTop.draw(batch)
         bird.next()
+
+        pipeBottom.moveAxisX()
+        pipeBottom.draw(batch)
+
+        pipeTop.moveAxisX()
+        pipeTop.draw(batch)
+
+        val width = Gdx.graphics.width.toFloat()
+        if(pipeBottom.axisXTemp == width && pipeTop.axisXTemp == width) {
+            spaceRandom = (random.nextInt(700) - 350).toFloat()
+        }
+
+        pipeBottom.moveAxisY(spaceRandom)
+        pipeTop.moveAxisY(spaceRandom)
     }
 
     fun dispose() {
@@ -138,8 +153,23 @@ private open class PipeModel(
     axisX: Float = 0f,
     axisY: Float = 0f,
 ) : ElementModel(img, axisX, axisY) {
+
+    var axisXTemp: Float = axisX
+    var axisYTemp: Float = axisY
+
     override fun draw(batch: SpriteBatch) {
-        batch.draw(img, axisX, axisY)
+        batch.draw(img, axisXTemp, axisYTemp)
+    }
+
+    fun moveAxisX() {
+        axisXTemp-= Gdx.graphics.deltaTime * 100
+        if(axisXTemp < -img.width) {
+            axisXTemp = Gdx.graphics.width.toFloat()
+        }
+    }
+
+    fun moveAxisY(spaceRandom: Float) {
+        axisYTemp = axisY + spaceRandom
     }
 }
 
