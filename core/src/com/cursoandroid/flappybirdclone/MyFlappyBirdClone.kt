@@ -31,17 +31,23 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         val spacePipes = 400f/2
 
         val pipeTopImg = Texture("cano_topo_maior.png")
+        val pipeTopHeight = (pipeTopImg.height + pipeTopImg.height/2).toFloat()
         val pipeTop = PipeModel(
             img = pipeTopImg,
             axisX = Gdx.graphics.width.toFloat() - pipeTopImg.width,
             axisY = (background.height / 2) + spacePipes,
+            width = pipeTopImg.width.toFloat(),
+            height = pipeTopHeight
         )
 
         val pipeBottomImg = Texture("cano_baixo_maior.png")
+        val pipeBottomHeight = (pipeBottomImg.height + pipeBottomImg.height/2).toFloat()
         val pipeBottom = PipeModel(
             img = pipeBottomImg,
             axisX = Gdx.graphics.width.toFloat() - pipeBottomImg.width,
-            axisY = ((background.height / 2) - pipeBottomImg.height) - spacePipes,
+            axisY = ((background.height / 2) - pipeBottomHeight) - spacePipes,
+            width = pipeBottomImg.width.toFloat(),
+            height = pipeBottomHeight
         )
 
         model = FlappyBirdModel(
@@ -76,8 +82,8 @@ private class FlappyBirdModel(
     fun draw(batch: SpriteBatch) {
         background.draw(batch)
 
-        bird.applyGravity(Gdx.input.justTouched())
         bird.draw(batch)
+        bird.applyGravity(Gdx.input.justTouched())
         bird.next()
 
         pipeBottom.moveAxisX()
@@ -86,9 +92,10 @@ private class FlappyBirdModel(
         pipeTop.moveAxisX()
         pipeTop.draw(batch)
 
-        val width = Gdx.graphics.width.toFloat()
-        if(pipeBottom.axisXTemp == width && pipeTop.axisXTemp == width) {
-            spaceRandom = (random.nextInt(700) - 350).toFloat()
+        if(pipeBottom.isAxisXReset && pipeTop.isAxisXReset) {
+            spaceRandom = (random.nextInt(900) - 450).toFloat()
+            pipeTop.isAxisXReset = false
+            pipeBottom.isAxisXReset = false
         }
 
         pipeBottom.moveAxisY(spaceRandom)
@@ -152,19 +159,23 @@ private open class PipeModel(
     img: Texture,
     axisX: Float = 0f,
     axisY: Float = 0f,
-) : ElementModel(img, axisX, axisY) {
+    width: Float = 0f,
+    height: Float = 0f
+) : ElementModel(img, axisX, axisY, width, height) {
 
-    var axisXTemp: Float = axisX
-    var axisYTemp: Float = axisY
+    private var axisXTemp: Float = axisX
+    private var axisYTemp: Float = axisY
+    var isAxisXReset = false
 
     override fun draw(batch: SpriteBatch) {
-        batch.draw(img, axisXTemp, axisYTemp)
+        batch.draw(img, axisXTemp, axisYTemp, width, height)
     }
 
     fun moveAxisX() {
-        axisXTemp-= Gdx.graphics.deltaTime * 100
+        axisXTemp-= Gdx.graphics.deltaTime * 150
         if(axisXTemp < -img.width) {
             axisXTemp = Gdx.graphics.width.toFloat()
+            isAxisXReset = true
         }
     }
 
