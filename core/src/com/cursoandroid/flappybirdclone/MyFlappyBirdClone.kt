@@ -10,10 +10,22 @@ import kotlin.collections.ArrayList
 class MyFlappyBirdClone : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch
     private lateinit var model: FlappyBirdModel
+    private val spacePipes = 200f
 
     override fun create() {
         batch = SpriteBatch()
         initModel()
+    }
+
+    override fun render() {
+        batch.begin()
+        model.draw(batch)
+        batch.end()
+    }
+
+    override fun dispose() {
+        batch.dispose()
+        model.dispose()
     }
 
     private fun initModel() {
@@ -28,27 +40,8 @@ class MyFlappyBirdClone : ApplicationAdapter() {
             axisY = Gdx.graphics.height.toFloat() / 2,
         )
 
-        val spacePipes = 400f/2
-
-        val pipeTopImg = Texture("cano_topo_maior.png")
-        val pipeTopHeight = (pipeTopImg.height + pipeTopImg.height/2).toFloat()
-        val pipeTop = PipeModel(
-            img = pipeTopImg,
-            axisX = Gdx.graphics.width.toFloat() - pipeTopImg.width,
-            axisY = (background.height / 2) + spacePipes,
-            width = pipeTopImg.width.toFloat(),
-            height = pipeTopHeight
-        )
-
-        val pipeBottomImg = Texture("cano_baixo_maior.png")
-        val pipeBottomHeight = (pipeBottomImg.height + pipeBottomImg.height/2).toFloat()
-        val pipeBottom = PipeModel(
-            img = pipeBottomImg,
-            axisX = Gdx.graphics.width.toFloat() - pipeBottomImg.width,
-            axisY = ((background.height / 2) - pipeBottomHeight) - spacePipes,
-            width = pipeBottomImg.width.toFloat(),
-            height = pipeBottomHeight
-        )
+        val pipeTop = createPipeTopModel(background)
+        val pipeBottom = createPipeBottomModel(background)
 
         model = FlappyBirdModel(
             background = background,
@@ -58,17 +51,29 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         )
     }
 
-    override fun render() {
-        batch.begin()
-        model.draw(batch)
-        batch.end()
+    private fun createPipeTopModel(background: ElementModel): PipeModel {
+        val pipeTopImg = Texture("cano_topo_maior.png")
+        val pipeTopHeight = (pipeTopImg.height + pipeTopImg.height / 2).toFloat()
+        return PipeModel(
+            img = pipeTopImg,
+            axisX = Gdx.graphics.width.toFloat() - pipeTopImg.width,
+            axisY = (background.height / 2) + spacePipes,
+            width = pipeTopImg.width.toFloat(),
+            height = pipeTopHeight
+        )
     }
 
-    override fun dispose() {
-        batch.dispose()
-        model.dispose()
+    private fun createPipeBottomModel(background: ElementModel): PipeModel {
+        val pipeBottomImg = Texture("cano_baixo_maior.png")
+        val pipeBottomHeight = (pipeBottomImg.height + pipeBottomImg.height / 2).toFloat()
+        return PipeModel(
+            img = pipeBottomImg,
+            axisX = Gdx.graphics.width.toFloat() - pipeBottomImg.width,
+            axisY = ((background.height / 2) - pipeBottomHeight) - spacePipes,
+            width = pipeBottomImg.width.toFloat(),
+            height = pipeBottomHeight
+        )
     }
-
 }
 
 private class FlappyBirdModel(
@@ -116,7 +121,7 @@ private class BirdModel(
     var gravity: Float = 0f,
 ) : Coordinate(axisX, axisY) {
     var index: Float = 0F
-        get() = if (field > 3) 0F else field
+        get() = if (field >= 3) 0F else field
     private val imgs: ArrayList<Texture>
 
     init {
