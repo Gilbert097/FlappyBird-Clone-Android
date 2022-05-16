@@ -11,6 +11,10 @@ class MyFlappyBirdClone : ApplicationAdapter() {
 
     override fun create() {
         batch = SpriteBatch()
+        initModel()
+    }
+
+    private fun initModel() {
         val background = ElementModel(
             img = Texture("fundo.png"),
             width = Gdx.graphics.width.toFloat(),
@@ -21,23 +25,29 @@ class MyFlappyBirdClone : ApplicationAdapter() {
             axisX = 30F,
             axisY = Gdx.graphics.height.toFloat() / 2,
         )
+        val pipeTop = ElementModel(
+            img = Texture("cano_topo_maior.png"),
+            axisX = Gdx.graphics.width.toFloat(),
+            axisY = 0f,
+        )
+
+        val pipeBottom = ElementModel(
+            img = Texture("cano_baixo_maior.png"),
+            axisX = Gdx.graphics.width.toFloat(),
+            axisY = 0f,
+        )
 
         model = FlappyBirdModel(
             background = background,
             bird = bird,
-            gravity = 0F
+            pipeTop = pipeTop,
+            pipeBottom = pipeBottom
         )
     }
 
     override fun render() {
         batch.begin()
-
-        model.applyGravity(Gdx.input.justTouched())
-
         model.draw(batch)
-
-        model.next()
-
         batch.end()
     }
 
@@ -46,24 +56,45 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         model.dispose()
     }
 
-
 }
 
 private class FlappyBirdModel(
     val background: ElementModel,
     val bird: BirdModel,
-    var gravity: Float
+    val pipeTop: ElementModel,
+    val pipeBottom: ElementModel,
 ) {
-    val pipeTop = Texture("cano_topo_maior.png")
-    val pipeBottom = Texture("cano_baixo_maior.png")
 
-    var index: Float = 0F
-        get() = if (field > 3) 0F else field
-
+    fun draw(batch: SpriteBatch) {
+        bird.applyGravity(Gdx.input.justTouched())
+        background.draw(batch)
+        bird.draw(batch)
+        bird.next()
+    }
 
     fun dispose() {
         background.dispose()
         bird.dispose()
+        pipeTop.dispose()
+        pipeBottom.dispose()
+    }
+}
+
+private class BirdModel(
+    axisX: Float = 0f,
+    axisY: Float = 0f,
+    var gravity: Float = 0f,
+) : Coordinate(axisX, axisY) {
+    var index: Float = 0F
+        get() = if (field > 3) 0F else field
+    private val imgs: ArrayList<Texture>
+
+    init {
+        imgs = fillBirdImagens()
+    }
+
+    fun draw(batch: SpriteBatch) {
+        batch.draw(imgs[index.toInt()], axisX, axisY)
     }
 
     fun next() {
@@ -72,34 +103,13 @@ private class FlappyBirdModel(
     }
 
     fun applyGravity(isTouched: Boolean) {
-
         if (isTouched) {
             gravity = -20f
         }
 
-        if (bird.axisY > 0 || isTouched) {
-            bird.axisY -= gravity
+        if (axisY > 0 || isTouched) {
+            axisY -= gravity
         }
-    }
-
-    fun draw(batch: SpriteBatch) {
-        background.draw(batch)
-        bird.draw(batch, index)
-    }
-}
-
-private class BirdModel(
-    axisX: Float = 0f,
-    axisY: Float = 0f,
-) : Coordinate(axisX, axisY) {
-    private val imgs: ArrayList<Texture>
-
-    init {
-        imgs = fillBirdImagens()
-    }
-
-    fun draw(batch: SpriteBatch, index: Float) {
-        batch.draw(imgs[index.toInt()], axisX, axisY)
     }
 
     fun dispose() {
