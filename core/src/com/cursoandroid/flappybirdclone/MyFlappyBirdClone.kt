@@ -25,16 +25,21 @@ class MyFlappyBirdClone : ApplicationAdapter() {
             axisX = 30F,
             axisY = Gdx.graphics.height.toFloat() / 2,
         )
-        val pipeTop = ElementModel(
-            img = Texture("cano_topo_maior.png"),
-            axisX = Gdx.graphics.width.toFloat(),
-            axisY = 0f,
+
+        val spacePipes = 400f/2
+
+        val pipeTopImg = Texture("cano_topo_maior.png")
+        val pipeTop = PipeModel(
+            img = pipeTopImg,
+            axisX = Gdx.graphics.width.toFloat() - pipeTopImg.width,
+            axisY = (background.height / 2) + spacePipes,
         )
 
-        val pipeBottom = ElementModel(
-            img = Texture("cano_baixo_maior.png"),
-            axisX = Gdx.graphics.width.toFloat(),
-            axisY = 0f,
+        val pipeBottomImg = Texture("cano_baixo_maior.png")
+        val pipeBottom = PipeModel(
+            img = pipeBottomImg,
+            axisX = Gdx.graphics.width.toFloat() - pipeBottomImg.width,
+            axisY = ((background.height / 2) - pipeBottomImg.height) - spacePipes,
         )
 
         model = FlappyBirdModel(
@@ -61,14 +66,17 @@ class MyFlappyBirdClone : ApplicationAdapter() {
 private class FlappyBirdModel(
     val background: ElementModel,
     val bird: BirdModel,
-    val pipeTop: ElementModel,
-    val pipeBottom: ElementModel,
+    val pipeTop: PipeModel,
+    val pipeBottom: PipeModel
 ) {
 
     fun draw(batch: SpriteBatch) {
         bird.applyGravity(Gdx.input.justTouched())
         background.draw(batch)
         bird.draw(batch)
+        //pipeBottom.axisX--
+        pipeBottom.draw(batch)
+        pipeTop.draw(batch)
         bird.next()
     }
 
@@ -125,6 +133,16 @@ private class BirdModel(
     }
 }
 
+private open class PipeModel(
+    img: Texture,
+    axisX: Float = 0f,
+    axisY: Float = 0f,
+) : ElementModel(img, axisX, axisY) {
+    override fun draw(batch: SpriteBatch) {
+        batch.draw(img, axisX, axisY)
+    }
+}
+
 private open class ElementModel(
     val img: Texture,
     axisX: Float = 0f,
@@ -143,7 +161,7 @@ private open class ElementModel(
 }
 
 private open class Coordinate(
-    val axisX: Float = 0f,
+    var axisX: Float = 0f,
     var axisY: Float = 0f,
     val width: Float = 0f,
     val height: Float = 0f,
