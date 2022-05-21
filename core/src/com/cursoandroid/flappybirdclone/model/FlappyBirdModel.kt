@@ -2,7 +2,6 @@ package com.cursoandroid.flappybirdclone.model
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import java.util.*
 
 class FlappyBirdModel(
@@ -36,10 +35,10 @@ class FlappyBirdModel(
         val isTouched = Gdx.input.justTouched()
         when (state) {
             GameState.WAITING -> {
-                onWaiting(isTouched)
+                executeStateWaiting(isTouched)
             }
             GameState.PLAYING -> {
-                onPlaying(isTouched)
+                executeStatePlaying(isTouched)
             }
             GameState.FINISHED -> {
 
@@ -47,7 +46,7 @@ class FlappyBirdModel(
         }
     }
 
-    private fun onPlaying(isTouched: Boolean) {
+    private fun executeStatePlaying(isTouched: Boolean) {
         //Aplicando gravidade no pássaro
         bird.move(isTouched)
 
@@ -70,7 +69,7 @@ class FlappyBirdModel(
         pipeTop.moveAxisY(spaceRandom)
     }
 
-    private fun onWaiting(isTouched: Boolean) {
+    private fun executeStateWaiting(isTouched: Boolean) {
         if (isTouched) {
             state = GameState.PLAYING
             //Aplicando gravidade no passáro
