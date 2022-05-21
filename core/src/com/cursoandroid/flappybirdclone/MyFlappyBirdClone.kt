@@ -5,8 +5,6 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.cursoandroid.flappybirdclone.model.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class MyFlappyBirdClone : ApplicationAdapter() {
     private lateinit var batch: SpriteBatch

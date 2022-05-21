@@ -2,6 +2,7 @@ package com.cursoandroid.flappybirdclone.model
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import java.util.*
 
 class FlappyBirdModel(
@@ -13,6 +14,7 @@ class FlappyBirdModel(
 ) {
     private val random = Random()
     private var spaceRandom = 0f
+    private var isBirdCollided = false
 
     fun draw(batch: SpriteBatch) {
         //Desenhando fundo
@@ -31,6 +33,8 @@ class FlappyBirdModel(
         pipeTop.moveAxisX()
         pipeTop.draw(batch)
 
+        validateBirdCollided()
+
         //Gerando espaço aleatório entre canos
         validateGenerateRandomSpace()
 
@@ -44,6 +48,14 @@ class FlappyBirdModel(
         //(Movendo o espaço entre os canos de posição)
         pipeBottom.moveAxisY(spaceRandom)
         pipeTop.moveAxisY(spaceRandom)
+    }
+
+    private fun validateBirdCollided() {
+        val isColliedPipes = (pipeTop.isBirdCollided(bird) || pipeBottom.isBirdCollided(bird))
+        if (!isBirdCollided && isColliedPipes) {
+            isBirdCollided = true
+            Gdx.app.log("FlappyBirdModel", "Colidiu!")
+        }
     }
 
     private fun validatePunctuationIncrement() {

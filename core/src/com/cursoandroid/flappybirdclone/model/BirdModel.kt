@@ -3,6 +3,7 @@ package com.cursoandroid.flappybirdclone.model
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Circle
 
 class BirdModel(
     axisX: Float = 0f,
@@ -12,13 +13,18 @@ class BirdModel(
     var index: Float = 0F
         get() = if (field >= 3) 0F else field
     private val imgs: ArrayList<Texture>
+    val circle = Circle()
 
     init {
         imgs = fillBirdImagens()
     }
 
     fun draw(batch: SpriteBatch) {
-        batch.draw(imgs[index.toInt()], axisX, axisY)
+        val image = imgs[index.toInt()]
+        batch.draw(image, axisX, axisY)
+        val halfHeight = image.height/2
+        val halfWidth = image.width/2
+        circle.set(axisX + halfWidth, axisY + halfHeight, halfHeight.toFloat())
     }
 
     fun next() {
@@ -28,7 +34,7 @@ class BirdModel(
 
     fun applyGravity(isTouched: Boolean) {
         if (isTouched) {
-            gravity = -20f
+            gravity = -15f
         }
 
         if (axisY > 0 || isTouched) {

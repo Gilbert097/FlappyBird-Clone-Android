@@ -3,6 +3,8 @@ package com.cursoandroid.flappybirdclone.model
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.math.Intersector
+import com.badlogic.gdx.math.Rectangle
 
 class PipeModel(
     img: Texture,
@@ -18,9 +20,11 @@ class PipeModel(
 
     private var axisYCurrent: Float = axisY
     private var spaceRandom: Float = 0f
+    private val rectangle = Rectangle()
 
-    override fun draw(batch: SpriteBatch) {
+    override fun draw(batch: SpriteBatch)  {
         batch.draw(img, axisXCurrent, axisYCurrent, width, height)
+        rectangle.set(axisXCurrent, axisYCurrent, width, height)
     }
 
     fun moveAxisX() {
@@ -38,4 +42,7 @@ class PipeModel(
         }
         this.axisYCurrent = axisY + spaceRandom
     }
+
+    fun isBirdCollided(birdModel: BirdModel) =
+        Intersector.overlaps(birdModel.circle, rectangle)
 }
