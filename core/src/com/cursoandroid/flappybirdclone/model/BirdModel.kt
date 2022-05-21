@@ -27,12 +27,17 @@ class BirdModel(
         circle.set(axisX + halfWidth, axisY + halfHeight, halfHeight.toFloat())
     }
 
-    fun next() {
+    fun move(isTouched: Boolean){
+        applyGravity(isTouched)
+        next()
+    }
+
+    private fun next() {
         index += Gdx.graphics.deltaTime * 5
         gravity++
     }
 
-    fun applyGravity(isTouched: Boolean) {
+    private fun applyGravity(isTouched: Boolean) {
         if (isTouched) {
             gravity = -15f
         }

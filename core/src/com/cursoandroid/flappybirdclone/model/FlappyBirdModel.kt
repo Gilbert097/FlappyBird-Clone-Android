@@ -15,45 +15,64 @@ class FlappyBirdModel(
     private val random = Random()
     private var spaceRandom = 0f
     private var isBirdCollided = false
+    private var state: GameState = GameState.WAITING
 
     fun draw(batch: SpriteBatch) {
         //Desenhando fundo
         background.draw(batch)
 
-        //Desenhando pássaro e aplicando gravidade
+        //Desenhando pássaro
         bird.draw(batch)
-        bird.applyGravity(Gdx.input.justTouched())
-        bird.next()
 
-        //Desenhando e movendo cano de baixo no eixo X
-        pipeBottom.moveAxisX()
+        //Desenhando cano cima e baixo
         pipeBottom.draw(batch)
-
-        //Desenhando e movendo cano de cima no eixo X
-        pipeTop.moveAxisX()
         pipeTop.draw(batch)
-
-        validateBirdCollided()
-
-        //Gerando espaço aleatório entre canos
-        validateGenerateRandomSpace()
 
         //Desenhando texto da pontuação
         punctuationModel.draw(batch)
 
-        //Incrementando valor da pontuação
-        validatePunctuationIncrement()
+        val isTouched = Gdx.input.justTouched()
+        when(state){
+            GameState.WAITING -> {
+                if(isTouched){
+                    state =  GameState.PLAYING
+                    //Aplicando gravidade no passáro
+                    bird.move(isTouched)
+                }
+            }
+            GameState.PLAYING -> {
+                //Aplicando gravidade no pássaro
+                bird.move(isTouched)
 
-        //Alterando a altura dos canso de forma aleatória
-        //(Movendo o espaço entre os canos de posição)
-        pipeBottom.moveAxisY(spaceRandom)
-        pipeTop.moveAxisY(spaceRandom)
+                //movendo cano de cima e baixo no eixo X
+                pipeTop.moveAxisX()
+                pipeBottom.moveAxisX()
+
+                //Verificando se houve colisão do pássaro
+                validateBirdCollided()
+
+                //Gerando espaço aleatório entre canos
+                validateGenerateRandomSpace()
+
+                //Incrementando valor da pontuação
+                validatePunctuationIncrement()
+
+                //Alterando a altura dos canso de forma aleatória
+                //(Movendo o espaço entre os canos de posição)
+                pipeBottom.moveAxisY(spaceRandom)
+                pipeTop.moveAxisY(spaceRandom)
+            }
+            GameState.FINISHED -> {
+
+            }
+        }
     }
 
     private fun validateBirdCollided() {
         val isColliedPipes = (pipeTop.isBirdCollided(bird) || pipeBottom.isBirdCollided(bird))
         if (!isBirdCollided && isColliedPipes) {
             isBirdCollided = true
+            state = GameState.FINISHED
             Gdx.app.log("FlappyBirdModel", "Colidiu!")
         }
     }
