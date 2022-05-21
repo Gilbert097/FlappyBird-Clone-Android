@@ -37,7 +37,7 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         )
 
         val bird = BirdModel(
-            axisX = 30F,
+            axisX = 50f,
             axisY = Gdx.graphics.height.toFloat() / 2,
         )
 

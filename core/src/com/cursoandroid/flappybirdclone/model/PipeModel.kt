@@ -12,23 +12,30 @@ class PipeModel(
     height: Float = 0f
 ) : ElementModel(img, axisX, axisY, width, height) {
 
-    private var axisXTemp: Float = axisX
-    private var axisYTemp: Float = axisY
     var isAxisXReset = false
+    var axisXCurrent: Float = axisX
+        private set
+
+    private var axisYCurrent: Float = axisY
+    private var spaceRandom: Float = 0f
 
     override fun draw(batch: SpriteBatch) {
-        batch.draw(img, axisXTemp, axisYTemp, width, height)
+        batch.draw(img, axisXCurrent, axisYCurrent, width, height)
     }
 
     fun moveAxisX() {
-        axisXTemp-= Gdx.graphics.deltaTime * 150
-        if(axisXTemp < -img.width) {
-            axisXTemp = axisX
+        axisXCurrent-= Gdx.graphics.deltaTime * 150
+        if(axisXCurrent < -img.width) {
+            axisXCurrent = axisX
             isAxisXReset = true
         }
     }
 
     fun moveAxisY(spaceRandom: Float) {
-        axisYTemp = axisY + spaceRandom
+        if (this.spaceRandom != spaceRandom) {
+            this.spaceRandom = spaceRandom
+            this.isAxisXReset = false
+        }
+        this.axisYCurrent = axisY + spaceRandom
     }
 }

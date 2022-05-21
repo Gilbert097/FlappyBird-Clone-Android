@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 class PunctuationModel(
     axisX: Float = 0f,
     axisY: Float = 0f,
-    val bitmapFont: BitmapFont = BitmapFont(),
-    var value: Int = 0,
-    val fontSize: Int = 10,
-    val color: Color = Color.WHITE
+    private val bitmapFont: BitmapFont = BitmapFont(),
+    private var value: Int = 0,
+    fontSize: Int = 10,
+    color: Color = Color.WHITE
 ) : Coordinate(axisX, axisY) {
 
     init {
@@ -18,7 +18,11 @@ class PunctuationModel(
         bitmapFont.data.scale(fontSize.toFloat())
     }
 
-    fun draw(batch: SpriteBatch){
+    fun draw(batch: SpriteBatch) {
         bitmapFont.draw(batch, value.toString(), axisX, axisY)
+    }
+
+    fun incrementValue(){
+        value++
     }
 }
