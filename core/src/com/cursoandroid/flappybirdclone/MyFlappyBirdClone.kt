@@ -4,10 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.cursoandroid.flappybirdclone.model.BirdModel
-import com.cursoandroid.flappybirdclone.model.ElementModel
-import com.cursoandroid.flappybirdclone.model.FlappyBirdModel
-import com.cursoandroid.flappybirdclone.model.PipeModel
+import com.cursoandroid.flappybirdclone.model.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -47,11 +44,17 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         val pipeTop = createPipeTopModel(background)
         val pipeBottom = createPipeBottomModel(background)
 
+        val punctuationModel = PunctuationModel(
+            axisX = Gdx.graphics.width.toFloat()/2,
+            axisY = Gdx.graphics.height.toFloat() - 110
+        )
+
         model = FlappyBirdModel(
             background = background,
             bird = bird,
             pipeTop = pipeTop,
-            pipeBottom = pipeBottom
+            pipeBottom = pipeBottom,
+            punctuationModel = punctuationModel
         )
     }
 

@@ -8,7 +8,8 @@ class FlappyBirdModel(
     val background: ElementModel,
     val bird: BirdModel,
     val pipeTop: PipeModel,
-    val pipeBottom: PipeModel
+    val pipeBottom: PipeModel,
+    val punctuationModel: PunctuationModel
 ) {
     private val random = Random()
     private var spaceRandom = 0f
@@ -38,6 +39,8 @@ class FlappyBirdModel(
         //(Movendo o espaço entre os canos de posição)
         pipeBottom.moveAxisY(spaceRandom)
         pipeTop.moveAxisY(spaceRandom)
+
+        punctuationModel.draw(batch)
     }
 
     private fun validateResetAxisXPipes() {
