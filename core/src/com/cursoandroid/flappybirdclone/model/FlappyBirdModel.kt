@@ -13,7 +13,6 @@ class FlappyBirdModel(
 ) {
     private val random = Random()
     private var spaceRandom = 0f
-    private var isIncrementedValue = false
 
     fun draw(batch: SpriteBatch) {
         //Desenhando fundo
@@ -48,13 +47,12 @@ class FlappyBirdModel(
     }
 
     private fun validatePunctuationIncrement() {
-        if (!isIncrementedValue && isBirdPassed()) {
-            isIncrementedValue = true
+        if (!punctuationModel.isIncrementedValue && isBirdPassed()) {
             punctuationModel.incrementValue()
         }
 
         if (isResetPipes()) {
-            isIncrementedValue = false
+            punctuationModel.reset()
         }
     }
 

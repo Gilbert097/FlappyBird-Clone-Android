@@ -12,6 +12,8 @@ class PunctuationModel(
     fontSize: Int = 10,
     color: Color = Color.WHITE
 ) : Coordinate(axisX, axisY) {
+    var isIncrementedValue = false
+        private set
 
     init {
         bitmapFont.color = color
@@ -23,6 +25,11 @@ class PunctuationModel(
     }
 
     fun incrementValue(){
+        isIncrementedValue = true
         value++
+    }
+
+    fun reset(){
+        isIncrementedValue = false
     }
 }
