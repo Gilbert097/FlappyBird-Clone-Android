@@ -19,6 +19,7 @@ class MyFlappyBirdClone : ApplicationAdapter() {
     override fun render() {
         batch.begin()
         model.draw(batch)
+        model.execute()
         batch.end()
     }
 

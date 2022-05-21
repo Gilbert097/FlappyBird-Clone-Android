@@ -30,42 +30,59 @@ class FlappyBirdModel(
 
         //Desenhando texto da pontuação
         punctuationModel.draw(batch)
+    }
 
+    fun execute() {
         val isTouched = Gdx.input.justTouched()
-        when(state){
+        when (state) {
             GameState.WAITING -> {
-                if(isTouched){
-                    state =  GameState.PLAYING
-                    //Aplicando gravidade no passáro
-                    bird.move(isTouched)
-                }
+                onWaiting(isTouched)
             }
             GameState.PLAYING -> {
-                //Aplicando gravidade no pássaro
-                bird.move(isTouched)
-
-                //movendo cano de cima e baixo no eixo X
-                pipeTop.moveAxisX()
-                pipeBottom.moveAxisX()
-
-                //Verificando se houve colisão do pássaro
-                validateBirdCollided()
-
-                //Gerando espaço aleatório entre canos
-                validateGenerateRandomSpace()
-
-                //Incrementando valor da pontuação
-                validatePunctuationIncrement()
-
-                //Alterando a altura dos canso de forma aleatória
-                //(Movendo o espaço entre os canos de posição)
-                pipeBottom.moveAxisY(spaceRandom)
-                pipeTop.moveAxisY(spaceRandom)
+                onPlaying(isTouched)
             }
             GameState.FINISHED -> {
 
             }
         }
+    }
+
+    private fun onPlaying(isTouched: Boolean) {
+        //Aplicando gravidade no pássaro
+        bird.move(isTouched)
+
+        //movendo cano de cima e baixo no eixo X
+        pipeTop.moveAxisX()
+        pipeBottom.moveAxisX()
+
+        //Verificando se houve colisão do pássaro
+        validateBirdCollided()
+
+        //Gerando espaço aleatório entre canos
+        validateGenerateRandomSpace()
+
+        //Incrementando valor da pontuação
+        validatePunctuationIncrement()
+
+        //Alterando a altura dos canso de forma aleatória
+        //(Movendo o espaço entre os canos de posição)
+        pipeBottom.moveAxisY(spaceRandom)
+        pipeTop.moveAxisY(spaceRandom)
+    }
+
+    private fun onWaiting(isTouched: Boolean) {
+        if (isTouched) {
+            state = GameState.PLAYING
+            //Aplicando gravidade no passáro
+            bird.move(isTouched)
+        }
+    }
+
+    fun dispose() {
+        background.dispose()
+        bird.dispose()
+        pipeTop.dispose()
+        pipeBottom.dispose()
     }
 
     private fun validateBirdCollided() {
@@ -97,12 +114,5 @@ class FlappyBirdModel(
         if (isResetPipes()) {
             spaceRandom = (random.nextInt(900) - 450).toFloat()
         }
-    }
-
-    fun dispose() {
-        background.dispose()
-        bird.dispose()
-        pipeTop.dispose()
-        pipeBottom.dispose()
     }
 }
