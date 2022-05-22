@@ -12,10 +12,15 @@ class FlappyBirdModel(
     val scoreModel: ScoreModel,
     val gameFinishModel: GameFinishModel
 ) {
+    companion object {
+        private const val BEST_SCORE_KEY = "best_score"
+    }
+
     private val random = Random()
     private var spaceRandom = 0f
     private var isBirdCollided = false
     private var state: GameState = GameState.WAITING
+    private val preferences = Gdx.app.getPreferences(BEST_SCORE_KEY)
 
     fun draw(batch: SpriteBatch) {
         //Desenhando fundo
@@ -89,12 +94,25 @@ class FlappyBirdModel(
     }
 
     private fun executeStateFinished(batch: SpriteBatch, isTouched: Boolean) {
-        gameFinishModel.draw(batch, scoreModel.value)
         bird.animateCollided()
+
+        val currentBestScore = updateBestScore()
+        gameFinishModel.draw(batch, currentBestScore)
+
         //Aguardando toque na tela para resetar o jogo
         if (isTouched) {
             resetGame()
         }
+    }
+
+    private fun updateBestScore(): Int {
+        var currentBestScore = preferences.getInteger(BEST_SCORE_KEY, 0)
+        if (scoreModel.value > currentBestScore) {
+            currentBestScore = scoreModel.value
+            preferences.putInteger(BEST_SCORE_KEY, currentBestScore)
+            preferences.flush();
+        }
+        return currentBestScore
     }
 
     private fun resetGame() {
