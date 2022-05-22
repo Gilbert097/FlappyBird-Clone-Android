@@ -9,7 +9,8 @@ class FlappyBirdModel(
     val bird: BirdModel,
     val pipeTop: PipeModel,
     val pipeBottom: PipeModel,
-    val punctuationModel: PunctuationModel
+    val scoreModel: ScoreModel,
+    val gameFinishModel: GameFinishModel
 ) {
     private val random = Random()
     private var spaceRandom = 0f
@@ -28,10 +29,10 @@ class FlappyBirdModel(
         pipeTop.draw(batch)
 
         //Desenhando texto da pontuação
-        punctuationModel.draw(batch)
+        scoreModel.draw(batch)
     }
 
-    fun execute() {
+    fun execute(batch: SpriteBatch) {
         val isTouched = Gdx.input.justTouched()
         when (state) {
             GameState.WAITING -> {
@@ -41,7 +42,7 @@ class FlappyBirdModel(
                 executeStatePlaying(isTouched)
             }
             GameState.FINISHED -> {
-
+                gameFinishModel.draw(batch)
             }
         }
     }
@@ -61,7 +62,7 @@ class FlappyBirdModel(
         validateGenerateRandomSpace()
 
         //Incrementando valor da pontuação
-        validatePunctuationIncrement()
+        validateScoreIncrement()
 
         //Alterando a altura dos canso de forma aleatória
         //(Movendo o espaço entre os canos de posição)
@@ -82,6 +83,7 @@ class FlappyBirdModel(
         bird.dispose()
         pipeTop.dispose()
         pipeBottom.dispose()
+        scoreModel.dispose()
     }
 
     private fun validateBirdCollided() {
@@ -93,13 +95,13 @@ class FlappyBirdModel(
         }
     }
 
-    private fun validatePunctuationIncrement() {
-        if (!punctuationModel.isIncrementedValue && isBirdPassed()) {
-            punctuationModel.incrementValue()
+    private fun validateScoreIncrement() {
+        if (!scoreModel.isIncrementedValue && isBirdPassed()) {
+            scoreModel.incrementValue()
         }
 
         if (isResetPipes()) {
-            punctuationModel.reset()
+            scoreModel.reset()
         }
     }
 

@@ -19,7 +19,7 @@ class MyFlappyBirdClone : ApplicationAdapter() {
     override fun render() {
         batch.begin()
         model.draw(batch)
-        model.execute()
+        model.execute(batch)
         batch.end()
     }
 
@@ -43,17 +43,32 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         val pipeTop = createPipeTopModel(background)
         val pipeBottom = createPipeBottomModel(background)
 
-        val punctuationModel = PunctuationModel(
-            axisX = Gdx.graphics.width.toFloat()/2,
+        val scoreModel = ScoreModel(
+            axisX = Gdx.graphics.width.toFloat() / 2,
             axisY = Gdx.graphics.height.toFloat() - 110
         )
+
+        val gameFinishModel = createGameFinishModel()
 
         model = FlappyBirdModel(
             background = background,
             bird = bird,
             pipeTop = pipeTop,
             pipeBottom = pipeBottom,
-            punctuationModel = punctuationModel
+            scoreModel = scoreModel,
+            gameFinishModel = gameFinishModel
+        )
+    }
+
+    private fun createGameFinishModel(): GameFinishModel {
+        val gameOverImage = Texture("game_over.png")
+        val imageModel = ElementModel(
+            img = Texture("game_over.png"),
+            axisX = (Gdx.graphics.width.toFloat() / 2) - (gameOverImage.width / 2),
+            axisY = Gdx.graphics.height.toFloat() / 2
+        )
+        return GameFinishModel(
+            imageModel = imageModel
         )
     }
 

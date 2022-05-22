@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
-class PunctuationModel(
+class ScoreModel(
     axisX: Float = 0f,
     axisY: Float = 0f,
     private val bitmapFont: BitmapFont = BitmapFont(),
@@ -31,5 +31,9 @@ class PunctuationModel(
 
     fun reset(){
         isIncrementedValue = false
+    }
+
+    fun dispose() {
+        bitmapFont.dispose()
     }
 }

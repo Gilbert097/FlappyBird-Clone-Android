@@ -11,7 +11,11 @@ open class ElementModel(
 ) : Coordinate(axisX, axisY, width, height) {
 
     open fun draw(batch: SpriteBatch) {
-        batch.draw(img, axisX, axisY, width, height)
+        if(width > 0 && height > 0) {
+            batch.draw(img, axisX, axisY, width, height)
+        } else {
+            batch.draw(img, axisX, axisY)
+        }
     }
 
     fun dispose() {
