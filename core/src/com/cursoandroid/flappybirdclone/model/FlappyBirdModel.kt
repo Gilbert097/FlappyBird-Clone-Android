@@ -108,6 +108,7 @@ class FlappyBirdModel(
     private fun validateBirdCollided() {
         val isColliedPipes = (pipeTop.isBirdCollided(bird) || pipeBottom.isBirdCollided(bird))
         if (!isBirdCollided && isColliedPipes) {
+            bird.executeCollidedSound()
             isBirdCollided = true
             state = GameState.FINISHED
             Gdx.app.log("FlappyBirdModel", "Colidiu!")

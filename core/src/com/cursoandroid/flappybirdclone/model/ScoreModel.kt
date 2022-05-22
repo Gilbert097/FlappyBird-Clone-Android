@@ -1,5 +1,6 @@
 package com.cursoandroid.flappybirdclone.model
 
+import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -18,6 +19,9 @@ class ScoreModel(
     var value: Int = 0
         private set
 
+    private val fileSound = Gdx.files.internal("som_pontos.wav")
+    private val incrementValueSound = Gdx.audio.newSound(fileSound)
+
     init {
         bitmapFont.color = color
         bitmapFont.data.scale(fontSize.toFloat())
@@ -30,6 +34,7 @@ class ScoreModel(
     fun incrementValue(){
         isIncrementedValue = true
         value++
+        incrementValueSound.play()
     }
 
     fun resetIncrementControl(){
