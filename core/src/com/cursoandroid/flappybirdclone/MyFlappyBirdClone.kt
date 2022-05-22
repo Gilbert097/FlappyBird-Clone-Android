@@ -63,27 +63,36 @@ class MyFlappyBirdClone : ApplicationAdapter() {
 
     private fun createGameFinishModel(): GameFinishModel {
         val gameOverImage = Texture("game_over.png")
-        val centerAxisX = (Gdx.graphics.width.toFloat() / 2) - (gameOverImage.width / 2)
-
+        val newWidthImg = gameOverImage.width.toFloat() + (gameOverImage.width / 2)
+        val newHeightImg = gameOverImage.height.toFloat() + (gameOverImage.height / 2)
         val imageModel = ElementModel(
             img = Texture("game_over.png"),
-            axisX = centerAxisX,
-            axisY = Gdx.graphics.height.toFloat() / 2
+            axisX = (Gdx.graphics.width.toFloat() / 2) - (newWidthImg / 2),
+            axisY = Gdx.graphics.height.toFloat() / 2,
+            width = newWidthImg,
+            height = newHeightImg
         )
 
         val resetModel = TextElementModel(
             value = "Toque para reiniciar!",
-            axisX = centerAxisX,
+            axisX = (Gdx.graphics.width.toFloat() / 2) - newWidthImg/2.8f,
             axisY = (Gdx.graphics.height.toFloat() / 2) - (gameOverImage.height / 2),
             fontSize = 2,
             color = Color.GREEN
         )
-        val bestScoreModel = TextElementModel()
+
+        val bestScoreModel = TextElementModel(
+            value = "Seu recorde é: 0",
+            axisX = (Gdx.graphics.width.toFloat() / 2) - newWidthImg/3.5f,
+            axisY = resetModel.axisY - 55,
+            fontSize = 2,
+            color = Color.RED
+        )
 
         return GameFinishModel(
             imageModel = imageModel,
             resetModel = resetModel,
-            bestScoreModel = TextElementModel()
+            bestScoreModel = bestScoreModel
         )
     }
 

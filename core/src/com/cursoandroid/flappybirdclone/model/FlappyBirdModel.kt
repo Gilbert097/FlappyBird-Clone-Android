@@ -84,6 +84,7 @@ class FlappyBirdModel(
         pipeTop.dispose()
         pipeBottom.dispose()
         scoreModel.dispose()
+        gameFinishModel.dispose()
     }
 
     private fun validateBirdCollided() {
