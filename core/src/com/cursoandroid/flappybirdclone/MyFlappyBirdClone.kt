@@ -82,7 +82,6 @@ class MyFlappyBirdClone : ApplicationAdapter() {
         )
 
         val bestScoreModel = TextElementModel(
-            value = "Seu recorde é: %s pontos",
             axisX = (Gdx.graphics.width.toFloat() / 2) - newWidthImg/2.5f,
             axisY = resetModel.axisY - 55,
             fontSize = 2,

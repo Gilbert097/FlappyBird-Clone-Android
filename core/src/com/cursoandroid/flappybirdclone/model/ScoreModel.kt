@@ -32,11 +32,15 @@ class ScoreModel(
         value++
     }
 
-    fun reset(){
+    fun resetIncrementControl(){
         isIncrementedValue = false
     }
 
     fun dispose() {
         bitmapFont.dispose()
+    }
+
+    fun reset(){
+        value = 0
     }
 }

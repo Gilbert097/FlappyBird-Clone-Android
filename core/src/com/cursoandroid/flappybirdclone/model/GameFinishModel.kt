@@ -7,10 +7,12 @@ class GameFinishModel(
     val resetModel: TextElementModel,
     val bestScoreModel: TextElementModel
 ) {
+    private val bestScoreTemplate = "Seu recorde é: %s pontos"
+
     fun draw(batch: SpriteBatch, bestScore: Int) {
         imageModel.draw(batch)
         resetModel.draw(batch)
-        bestScoreModel.value = String.format(bestScoreModel.value, bestScore)
+        bestScoreModel.value = String.format(bestScoreTemplate, bestScore)
         bestScoreModel.draw(batch)
     }
 

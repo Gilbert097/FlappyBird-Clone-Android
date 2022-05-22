@@ -22,14 +22,14 @@ class PipeModel(
     private var spaceRandom: Float = 0f
     private val rectangle = Rectangle()
 
-    override fun draw(batch: SpriteBatch)  {
+    override fun draw(batch: SpriteBatch) {
         batch.draw(img, axisXCurrent, axisYCurrent, width, height)
         rectangle.set(axisXCurrent, axisYCurrent, width, height)
     }
 
     fun moveAxisX() {
-        axisXCurrent-= Gdx.graphics.deltaTime * 150
-        if(axisXCurrent < -img.width) {
+        axisXCurrent -= Gdx.graphics.deltaTime * 150
+        if (axisXCurrent < -img.width) {
             axisXCurrent = axisX
             isAxisXReset = true
         }
@@ -45,4 +45,9 @@ class PipeModel(
 
     fun isBirdCollided(birdModel: BirdModel) =
         Intersector.overlaps(birdModel.circle, rectangle)
+
+    fun reset() {
+        this.axisXCurrent = this.axisX
+        this.axisYCurrent = this.axisY
+    }
 }

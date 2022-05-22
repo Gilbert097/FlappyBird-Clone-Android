@@ -12,8 +12,10 @@ class BirdModel(
 ) : Coordinate(axisX, axisY) {
     var index: Float = 0F
         get() = if (field >= 3) 0F else field
-    private val imgs: ArrayList<Texture>
     val circle = Circle()
+    private val imgs: ArrayList<Texture>
+    private var axisXCurrent = axisX
+    private var axisYCurrent = axisY
 
     init {
         imgs = fillBirdImagens()
@@ -21,10 +23,10 @@ class BirdModel(
 
     fun draw(batch: SpriteBatch) {
         val image = imgs[index.toInt()]
-        batch.draw(image, axisX, axisY)
-        val halfHeight = image.height/2
-        val halfWidth = image.width/2
-        circle.set(axisX + halfWidth, axisY + halfHeight, halfHeight.toFloat())
+        batch.draw(image, axisXCurrent, axisYCurrent)
+        val halfHeight = image.height / 2
+        val halfWidth = image.width / 2
+        circle.set(axisXCurrent + halfWidth, axisYCurrent + halfHeight, halfHeight.toFloat())
     }
 
     fun animate() {
@@ -36,8 +38,8 @@ class BirdModel(
             gravity = -15f
         }
 
-        if (axisY > 0 || isTouched) {
-            axisY -= gravity
+        if (axisYCurrent > 0 || isTouched) {
+            axisYCurrent -= gravity
         }
 
         gravity++
@@ -45,6 +47,11 @@ class BirdModel(
 
     fun dispose() {
         imgs.forEach { it.dispose() }
+    }
+
+    fun reset() {
+        this.axisXCurrent = this.axisX
+        this.axisYCurrent = this.axisY
     }
 
     private fun fillBirdImagens(): ArrayList<Texture> {

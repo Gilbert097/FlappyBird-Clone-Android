@@ -33,6 +33,7 @@ class FlappyBirdModel(
     }
 
     fun execute(batch: SpriteBatch) {
+        bird.animate()
         val isTouched = Gdx.input.justTouched()
         when (state) {
             GameState.WAITING -> {
@@ -42,10 +43,18 @@ class FlappyBirdModel(
                 executeStatePlaying(isTouched)
             }
             GameState.FINISHED -> {
-                gameFinishModel.draw(batch, scoreModel.value)
+                executeStateFinished(batch, isTouched)
             }
         }
-        bird.animate()
+    }
+
+    fun dispose() {
+        background.dispose()
+        bird.dispose()
+        pipeTop.dispose()
+        pipeBottom.dispose()
+        scoreModel.dispose()
+        gameFinishModel.dispose()
     }
 
     private fun executeStatePlaying(isTouched: Boolean) {
@@ -79,13 +88,21 @@ class FlappyBirdModel(
         }
     }
 
-    fun dispose() {
-        background.dispose()
-        bird.dispose()
-        pipeTop.dispose()
-        pipeBottom.dispose()
-        scoreModel.dispose()
-        gameFinishModel.dispose()
+    private fun executeStateFinished(batch: SpriteBatch, isTouched: Boolean) {
+        gameFinishModel.draw(batch, scoreModel.value)
+        //Aguardando toque na tela para resetar o jogo
+        if (isTouched) {
+            resetGame()
+        }
+    }
+
+    private fun resetGame() {
+        state = GameState.WAITING
+        isBirdCollided = false
+        bird.reset()
+        pipeTop.reset()
+        pipeBottom.reset()
+        scoreModel.reset()
     }
 
     private fun validateBirdCollided() {
@@ -103,7 +120,7 @@ class FlappyBirdModel(
         }
 
         if (isResetPipes()) {
-            scoreModel.reset()
+            scoreModel.resetIncrementControl()
         }
     }
 
