@@ -59,7 +59,7 @@ class FlappyBirdModel(
 
     private fun executeStatePlaying(isTouched: Boolean) {
         //Aplicando gravidade no pássaro
-        bird.applyGravity(isTouched)
+        bird.move(isTouched)
 
         //movendo cano de cima e baixo no eixo X
         pipeTop.moveAxisX()
@@ -84,12 +84,13 @@ class FlappyBirdModel(
         if (isTouched) {
             state = GameState.PLAYING
             //Aplicando gravidade no passáro
-            bird.applyGravity(isTouched)
+            bird.move(isTouched)
         }
     }
 
     private fun executeStateFinished(batch: SpriteBatch, isTouched: Boolean) {
         gameFinishModel.draw(batch, scoreModel.value)
+        bird.animateCollided()
         //Aguardando toque na tela para resetar o jogo
         if (isTouched) {
             resetGame()

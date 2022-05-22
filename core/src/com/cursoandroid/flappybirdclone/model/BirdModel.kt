@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Circle
 class BirdModel(
     axisX: Float = 0f,
     axisY: Float = 0f,
-    var gravity: Float = 0f,
+    private var gravity: Float = 0f,
 ) : Coordinate(axisX, axisY) {
 
     val circle = Circle()
@@ -20,37 +20,52 @@ class BirdModel(
     private var axisYCurrent = axisY
     private val flappingSound = Gdx.audio.newSound(Gdx.files.internal("som_asa.wav"))
     private val collidedSound = Gdx.audio.newSound(Gdx.files.internal("som_batida.wav"))
-
+    private var axisXTemp = 0f
     init {
         imgs = fillBirdImagens()
     }
 
     fun draw(batch: SpriteBatch) {
         val image = imgs[index.toInt()]
-        batch.draw(image, axisXCurrent, axisYCurrent)
+        batch.draw(image, axisXCurrent + axisXTemp, axisYCurrent)
         val halfHeight = image.height / 2
         val halfWidth = image.width / 2
-        circle.set(axisXCurrent + halfWidth, axisYCurrent + halfHeight, halfHeight.toFloat())
+        circle.set(axisXCurrent + halfWidth + axisXTemp, axisYCurrent + halfHeight, halfHeight.toFloat())
     }
 
     fun executeCollidedSound(){
         collidedSound.play()
     }
 
+    fun animateCollided(){
+        val image = imgs[index.toInt()]
+        if((axisXCurrent + axisXTemp) > -image.width) {
+            axisXTemp -= Gdx.graphics.deltaTime * 500
+            applyGravity()
+            Gdx.app.log("Collided", "Caindo!")
+        }
+    }
+
     fun animate() {
         index += Gdx.graphics.deltaTime * 5
     }
 
-    fun applyGravity(isTouched: Boolean) {
+    fun move(isTouched: Boolean) {
+        moveUp(isTouched)
+        applyGravity(isTouched)
+    }
+
+    private fun moveUp(isTouched: Boolean) {
         if (isTouched) {
             gravity = -15f
             flappingSound.play()
         }
+    }
 
+    private fun applyGravity(isTouched: Boolean = false) {
         if (axisYCurrent > 0 || isTouched) {
             axisYCurrent -= gravity
         }
-
         gravity++
     }
 
@@ -61,6 +76,7 @@ class BirdModel(
     fun reset() {
         this.axisXCurrent = this.axisX
         this.axisYCurrent = this.axisY
+        this.axisXTemp = 0f
     }
 
     private fun fillBirdImagens(): ArrayList<Texture> {
