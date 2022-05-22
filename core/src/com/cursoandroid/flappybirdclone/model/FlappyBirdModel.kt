@@ -45,11 +45,12 @@ class FlappyBirdModel(
                 gameFinishModel.draw(batch)
             }
         }
+        bird.animate()
     }
 
     private fun executeStatePlaying(isTouched: Boolean) {
         //Aplicando gravidade no pássaro
-        bird.move(isTouched)
+        bird.applyGravity(isTouched)
 
         //movendo cano de cima e baixo no eixo X
         pipeTop.moveAxisX()
@@ -74,7 +75,7 @@ class FlappyBirdModel(
         if (isTouched) {
             state = GameState.PLAYING
             //Aplicando gravidade no passáro
-            bird.move(isTouched)
+            bird.applyGravity(isTouched)
         }
     }
 

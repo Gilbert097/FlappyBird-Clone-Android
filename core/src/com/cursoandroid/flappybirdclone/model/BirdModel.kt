@@ -27,17 +27,11 @@ class BirdModel(
         circle.set(axisX + halfWidth, axisY + halfHeight, halfHeight.toFloat())
     }
 
-    fun move(isTouched: Boolean){
-        applyGravity(isTouched)
-        next()
-    }
-
-    private fun next() {
+    fun animate() {
         index += Gdx.graphics.deltaTime * 5
-        gravity++
     }
 
-    private fun applyGravity(isTouched: Boolean) {
+    fun applyGravity(isTouched: Boolean) {
         if (isTouched) {
             gravity = -15f
         }
@@ -45,6 +39,8 @@ class BirdModel(
         if (axisY > 0 || isTouched) {
             axisY -= gravity
         }
+
+        gravity++
     }
 
     fun dispose() {
