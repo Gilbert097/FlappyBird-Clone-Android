@@ -2,6 +2,7 @@ package com.cursoandroid.flappybirdclone
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.cursoandroid.flappybirdclone.model.*
@@ -62,13 +63,27 @@ class MyFlappyBirdClone : ApplicationAdapter() {
 
     private fun createGameFinishModel(): GameFinishModel {
         val gameOverImage = Texture("game_over.png")
+        val centerAxisX = (Gdx.graphics.width.toFloat() / 2) - (gameOverImage.width / 2)
+
         val imageModel = ElementModel(
             img = Texture("game_over.png"),
-            axisX = (Gdx.graphics.width.toFloat() / 2) - (gameOverImage.width / 2),
+            axisX = centerAxisX,
             axisY = Gdx.graphics.height.toFloat() / 2
         )
+
+        val resetModel = TextElementModel(
+            value = "Toque para reiniciar!",
+            axisX = centerAxisX,
+            axisY = (Gdx.graphics.height.toFloat() / 2) - (gameOverImage.height / 2),
+            fontSize = 2,
+            color = Color.GREEN
+        )
+        val bestScoreModel = TextElementModel()
+
         return GameFinishModel(
-            imageModel = imageModel
+            imageModel = imageModel,
+            resetModel = resetModel,
+            bestScoreModel = TextElementModel()
         )
     }
 
