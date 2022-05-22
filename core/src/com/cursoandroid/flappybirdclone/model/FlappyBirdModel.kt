@@ -42,7 +42,7 @@ class FlappyBirdModel(
                 executeStatePlaying(isTouched)
             }
             GameState.FINISHED -> {
-                gameFinishModel.draw(batch)
+                gameFinishModel.draw(batch, scoreModel.value)
             }
         }
         bird.animate()

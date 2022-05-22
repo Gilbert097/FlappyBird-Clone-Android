@@ -8,11 +8,14 @@ class ScoreModel(
     axisX: Float = 0f,
     axisY: Float = 0f,
     private val bitmapFont: BitmapFont = BitmapFont(),
-    private var value: Int = 0,
     fontSize: Int = 10,
     color: Color = Color.WHITE
 ) : Coordinate(axisX, axisY) {
+
     var isIncrementedValue = false
+        private set
+
+    var value: Int = 0
         private set
 
     init {
