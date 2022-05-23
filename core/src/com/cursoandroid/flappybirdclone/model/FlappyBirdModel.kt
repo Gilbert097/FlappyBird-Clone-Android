@@ -19,6 +19,7 @@ class FlappyBirdModel(
     private val random = Random()
     private var spaceRandom = 0f
     private var isBirdCollided = false
+    private var isAnimateCollided = false
     private var state: GameState = GameState.WAITING
     private val preferences = Gdx.app.getPreferences(BEST_SCORE_KEY)
 
@@ -94,7 +95,9 @@ class FlappyBirdModel(
     }
 
     private fun executeStateFinished(batch: SpriteBatch, isTouched: Boolean) {
-        bird.animateCollided()
+        if (isAnimateCollided) {
+            bird.animateCollided()
+        }
 
         val currentBestScore = updateBestScore()
         gameFinishModel.draw(batch, currentBestScore)
@@ -118,6 +121,7 @@ class FlappyBirdModel(
     private fun resetGame() {
         state = GameState.WAITING
         isBirdCollided = false
+        isAnimateCollided = false
         bird.reset()
         pipeTop.reset()
         pipeBottom.reset()
@@ -126,7 +130,10 @@ class FlappyBirdModel(
 
     private fun validateBirdCollided() {
         val isColliedPipes = (pipeTop.isBirdCollided(bird) || pipeBottom.isBirdCollided(bird))
-        if (!isBirdCollided && isColliedPipes) {
+        if (!isBirdCollided && (isColliedPipes || bird.isFell())) {
+            if (isColliedPipes) {
+                this.isAnimateCollided = true
+            }
             bird.executeCollidedSound()
             isBirdCollided = true
             state = GameState.FINISHED

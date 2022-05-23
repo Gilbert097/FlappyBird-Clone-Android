@@ -79,10 +79,13 @@ class BirdModel(
         imgs.forEach { it.dispose() }
     }
 
+    fun isFell() = axisYCurrent <= 0f
+
     fun reset() {
         this.axisXCurrent = this.axisX
         this.axisYCurrent = this.axisY
         this.axisXTemp = 0f
+        this.gravity = 0f
     }
 
     private fun fillBirdImagens(): ArrayList<Texture> {
