@@ -95,6 +95,7 @@ class FlappyBirdModel(
     }
 
     private fun executeStateFinished(batch: SpriteBatch, isTouched: Boolean) {
+        //Caso o pássaro tenha caido, não é necessário animar a colisão
         if (isAnimateCollided) {
             bird.animateCollided()
         }
@@ -130,6 +131,7 @@ class FlappyBirdModel(
 
     private fun validateBirdCollided() {
         val isColliedPipes = (pipeTop.isBirdCollided(bird) || pipeBottom.isBirdCollided(bird))
+        //Validando se o pássaro bateu nos canos ou caiu.
         if (!isBirdCollided && (isColliedPipes || bird.isFell())) {
             if (isColliedPipes) {
                 this.isAnimateCollided = true
