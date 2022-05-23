@@ -16,6 +16,9 @@ class BirdModel(
         private const val GRAVITY_VALUE = -15f
         private const val FLAPPING_SOUND_PATH = "som_asa.wav"
         private const val COLLIDED_SOUND_PATH = "som_batida.wav"
+        private const val IMG_BIRD1_PATH = "passaro1.png"
+        private const val IMG_BIRD2_PATH = "passaro2.png"
+        private const val IMG_BIRD3_PATH = "passaro3.png"
     }
 
     val circle = Circle()
@@ -90,9 +93,9 @@ class BirdModel(
 
     private fun fillBirdImagens(): ArrayList<Texture> {
         val birdImgs = ArrayList<Texture>(3)
-        birdImgs.add(Texture("passaro1.png"))
-        birdImgs.add(Texture("passaro2.png"))
-        birdImgs.add(Texture("passaro3.png"))
+        birdImgs.add(Texture(IMG_BIRD1_PATH))
+        birdImgs.add(Texture(IMG_BIRD2_PATH))
+        birdImgs.add(Texture(IMG_BIRD3_PATH))
         return birdImgs
     }
 }
