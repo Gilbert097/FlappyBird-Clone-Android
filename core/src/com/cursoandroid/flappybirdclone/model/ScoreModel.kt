@@ -13,13 +13,17 @@ class ScoreModel(
     color: Color = Color.WHITE
 ) : Coordinate(axisX, axisY) {
 
+    companion object {
+        private const val INCREMENT_VALUE_PATH = "som_pontos.wav"
+    }
+
     var isIncrementedValue = false
         private set
 
     var value: Int = 0
         private set
 
-    private val fileSound = Gdx.files.internal("som_pontos.wav")
+    private val fileSound = Gdx.files.internal(INCREMENT_VALUE_PATH)
     private val incrementValueSound = Gdx.audio.newSound(fileSound)
 
     init {

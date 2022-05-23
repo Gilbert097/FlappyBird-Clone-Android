@@ -12,14 +12,20 @@ class BirdModel(
     private var gravity: Float = 0f,
 ) : Coordinate(axisX, axisY) {
 
+    companion object {
+        private const val GRAVITY_VALUE = -15f
+        private const val FLAPPING_SOUND_PATH = "som_asa.wav"
+        private const val COLLIDED_SOUND_PATH = "som_batida.wav"
+    }
+
     val circle = Circle()
     private var index: Float = 0F
         get() = if (field >= 3) 0F else field
     private val imgs: ArrayList<Texture>
     private var axisXCurrent = axisX
     private var axisYCurrent = axisY
-    private val flappingSound = Gdx.audio.newSound(Gdx.files.internal("som_asa.wav"))
-    private val collidedSound = Gdx.audio.newSound(Gdx.files.internal("som_batida.wav"))
+    private val flappingSound = Gdx.audio.newSound(Gdx.files.internal(FLAPPING_SOUND_PATH))
+    private val collidedSound = Gdx.audio.newSound(Gdx.files.internal(COLLIDED_SOUND_PATH))
     private var axisXTemp = 0f
     init {
         imgs = fillBirdImagens()
@@ -57,7 +63,7 @@ class BirdModel(
 
     private fun moveUp(isTouched: Boolean) {
         if (isTouched) {
-            gravity = -15f
+            gravity = GRAVITY_VALUE
             flappingSound.play()
         }
     }
