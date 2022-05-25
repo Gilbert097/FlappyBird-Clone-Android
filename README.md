@@ -4,7 +4,7 @@ Aplicativo Android criado com base no curso Desenvolvimento Android Completo 202
 No processo foi possível aprender:
 - Criar o projeto e utilizar a biblioteca LibGDX.
 - Utilizar a linguagem Kotlin. (No curso, o projeto foi feito em Java)
-- Aplicar programação orientado a objeto POO. (No curso o projeto foi feito de forma mais simples)
+- Aplicar programação orientado a objeto POO. (No curso, o projeto foi feito de forma mais simples)
 
 <h1>Telas</h1>
 Aguardando Início:
